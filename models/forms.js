@@ -1,11 +1,12 @@
-const nanoid = require('nanoid')
+const { nanoid } = require('nanoid')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
 const questionSchema = new Schema({
     QID: {
         type: String,
-        required: true
+        required: true,
+        default: nanoid(10)
     },
     type: {
         type: String,
@@ -38,9 +39,9 @@ const formSchema = new Schema({
     questions: [questionSchema]
 })
 
-const allFormsSchema = new Schema({
-    forms: [formSchema]
-})
+// const allFormsSchema = new Schema({
+//     forms: [formSchema]
+// })
 
-const Forms = mongoose.model('Form', allFormsSchema) // will look for forms collection in mongodb
-module.exports = Forms
+const Form = mongoose.model('Form', formSchema) // will look for forms collection in mongodb
+module.exports = Form
