@@ -1,26 +1,34 @@
 const app = require('express')()
 require('dotenv').config()
+const cors = require('cors')
+const bodyParser = require('body-parser')
 const { dbConnect } = require('./db/config')
 const Form = require('./models/forms')
 
 //connecting to mongodb
 dbConnect()
 
-app.get('/addForm', (req, res) => {
+app.use(cors())
+app.use(bodyParser.json())
+
+app.post('/addForm', (req, res) => {
     const form = new Form({
-        title: "form3",
-        desc: "form desc3"
+        title: req.body.title,
+        desc: req.body.desc
     })
 
-    console.log(form)
+    // console.log(form)
 
     form.save((err) => {
         if(err) {
             console.log(err)
             res.status(500).json({error: err})
         } else { 
-            console.log('saved') 
-            res.status(200).json({success: true})
+            // console.log(form._id.toHexString()) 
+            res.status(200).json({
+                success: true,
+                formId: form._id.toHexString()
+            })
         }
     })  
 })
@@ -56,6 +64,11 @@ app.get('/addQues', (req, res) => {
     }).catch((err) => {
         res.status(500).json({error: err})
     })
+})
+
+app.post('/', (req, res) => {
+    console.log(req.body)
+    res.status(200).json({message: `${req.body.message} received`})
 })
 
 app.listen(process.env.PORT, () => console.log(`server running at ${process.env.PORT}`))
