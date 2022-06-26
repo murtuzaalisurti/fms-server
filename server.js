@@ -66,6 +66,14 @@ app.get('/addQues', (req, res) => {
     })
 })
 
+app.post('/getForm', (req, res) => {
+    Form.findById(req.body.formId).then((form) => {
+        res.status(200).json({data: form})
+    }).catch((err) => {
+        res.status(500).json({error: err})
+    })
+})
+
 app.post('/', (req, res) => {
     console.log(req.body)
     res.status(200).json({message: `${req.body.message} received`})
