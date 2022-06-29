@@ -44,7 +44,7 @@ app.get('/allForms', (req, res) => {
 app.get('/addQues', (req, res) => {
     Form.findById('62bc6bb01010199b15f6c0d7').then((form) => {
         form.questions.push({
-            type: 'singleChoice',
+            type: 'singleChoice', // OR multipleChoice OR text
             QuestionText: 'This is question number 3',
             Option: [
                 {
