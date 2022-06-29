@@ -42,16 +42,16 @@ app.get('/allForms', (req, res) => {
 })
 
 app.get('/addQues', (req, res) => {
-    Form.findById('62b2c3ab7fbf5ce31ad6bb05').then((form) => {
+    Form.findById('62bc6bb01010199b15f6c0d7').then((form) => {
         form.questions.push({
-            type: 'text',
-            QuestionText: 'q2: hello',
+            type: 'singleChoice',
+            QuestionText: 'This is question number 3',
             Option: [
                 {
-                    OptionText: 'hello2'
+                    OptionText: 'Option 1'
                 },
                 {
-                    OptionText: 'hello3'
+                    OptionText: 'Option 2'
                 }
             ]
         })
