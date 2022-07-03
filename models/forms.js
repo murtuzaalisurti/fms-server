@@ -2,12 +2,22 @@ const { nanoid } = require('nanoid')
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
 
-const questionSchema = new Schema({
-    QID: {
+const responseSchema = new Schema({
+    qID: {
         type: String,
-        required: true,
-        default: nanoid(10)
+        required: true
     },
+    resText: {
+        type: String,
+        required: true
+    },
+    resType: {
+        type: String,
+        required: true
+    }
+})
+
+const questionSchema = new Schema({
     type: {
         type: String,
         required: true
@@ -19,7 +29,8 @@ const questionSchema = new Schema({
     Option: {
         type: mongoose.SchemaTypes.Array,
         required: true
-    }
+    },
+    responses: [responseSchema]
 })
 
 const formSchema = new Schema({
