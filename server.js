@@ -4,7 +4,6 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const { dbConnect } = require('./db/config')
 const Form = require('./models/forms')
-// const { nanoid } = require('nanoid')
 
 //connecting to mongodb
 dbConnect()
@@ -18,14 +17,11 @@ app.post('/addForm', (req, res) => {
         desc: req.body.desc
     })
 
-    // console.log(form)
-
     form.save((err) => {
         if(err) {
             console.log(err)
             res.status(500).json({error: err})
         } else { 
-            // console.log(form._id.toHexString()) 
             res.status(200).json({
                 success: true,
                 formId: form._id.toHexString()
@@ -82,7 +78,6 @@ app.post('/addResponse', (req, res) => {
             let que = form.questions.id(req.body.responses[j].qID)
             que.responses.push(req.body.responses[j])
         }
-        // console.log(que)
 
         form.save().then(() => {
             res.status(200).json({success: true})
@@ -102,9 +97,14 @@ app.post('/getForm', (req, res) => {
     })
 })
 
-app.post('/formResponse', (req, res) => {
-    console.log(req)
-    res.status(200).json({message: `${req.body} received`})
+app.post('/removeForm', (req, res) => {
+    Form.findByIdAndRemove(req.body.formId, (err, data) => {
+        if(err) {
+            res.status(500).json({err: data})
+        } else {
+            res.status(200).json({data: data})
+        }
+    })
 })
 
 app.listen(process.env.PORT, () => console.log(`server running at ${process.env.PORT}`))

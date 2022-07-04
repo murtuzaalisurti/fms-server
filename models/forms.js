@@ -7,8 +7,12 @@ const responseSchema = new Schema({
         type: String,
         required: true
     },
-    resText: {
+    resId: {
         type: String,
+        required: true
+    },
+    resText: {
+        type: mongoose.SchemaTypes.Array,
         required: true
     },
     resType: {
