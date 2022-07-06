@@ -2,11 +2,14 @@
   "name": "feedback-server",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "functions/api.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js",
-    "start": "node server.js"
+    "dev": "./node_modules/.bin/netlify-lambda build src",
+    "start": "./node_modules/.bin/netlify-lambda serve src"
+  },
+  "engines": {
+    "node": "14.18.1"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +20,8 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "mongoose": "^6.4.0",
-    "nanoid": "^3.3.1"
+    "nanoid": "^3.3.1",
+    "netlify-lambda": "^2.0.15",
+    "serverless-http": "^3.0.1"
   }
 }

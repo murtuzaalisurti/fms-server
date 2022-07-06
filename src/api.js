@@ -1,7 +1,9 @@
 const app = require('express')()
+const router = express.Router()
 require('dotenv').config()
 const cors = require('cors')
 const bodyParser = require('body-parser')
+const serverless = require('serverless-http')
 const { dbConnect } = require('./db/config')
 const Form = require('./models/forms')
 
@@ -11,7 +13,7 @@ dbConnect()
 app.use(cors())
 app.use(bodyParser.json())
 
-app.post('/addForm', (req, res) => {
+router.post('/addForm', (req, res) => {
     const form = new Form({
         title: req.body.title,
         desc: req.body.desc
@@ -30,7 +32,7 @@ app.post('/addForm', (req, res) => {
     })  
 })
 
-app.get('/allForms', (req, res) => {
+router.get('/allForms', (req, res) => {
     Form.find().then((forms) => {
         res.status(200).json({
             data: forms
@@ -38,7 +40,7 @@ app.get('/allForms', (req, res) => {
     })
 })
 
-app.post('/addQues', (req, res) => {
+router.post('/addQues', (req, res) => {
     let que;
     const options = []
     if(req.body.question.option == undefined) {
@@ -72,7 +74,7 @@ app.post('/addQues', (req, res) => {
     })
 })
 
-app.post('/addResponse', (req, res) => {
+router.post('/addResponse', (req, res) => {
     Form.findById(req.body.formId).then((form) => {
         for(let j = 0; j < req.body.responses.length; j++){
             let que = form.questions.id(req.body.responses[j].qID)
@@ -89,7 +91,7 @@ app.post('/addResponse', (req, res) => {
     })
 })
 
-app.post('/getForm', (req, res) => {
+router.post('/getForm', (req, res) => {
     Form.findById(req.body.formId).then((form) => {
         res.status(200).json({data: form})
     }).catch((err) => {
@@ -97,7 +99,7 @@ app.post('/getForm', (req, res) => {
     })
 })
 
-app.post('/removeForm', (req, res) => {
+router.post('/removeForm', (req, res) => {
     Form.findByIdAndRemove(req.body.formId, (err, data) => {
         if(err) {
             res.status(500).json({err: data})
@@ -107,4 +109,9 @@ app.post('/removeForm', (req, res) => {
     })
 })
 
-app.listen(process.env.PORT, () => console.log(`server running at ${process.env.PORT}`))
+app.use(`/.netlify/functions/api`, router);
+
+// app.listen(process.env.PORT, () => console.log(`server running at ${process.env.PORT}`))
+
+module.exports = app
+module.exports.handler = serverless(app)
